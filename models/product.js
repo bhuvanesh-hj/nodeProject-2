@@ -82,7 +82,7 @@
 //     return db.execute(`DELETE FROM products WHERE id=${id}`);
 //   }
 // };
-const Sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 const sequelize = require("../util/database");
 

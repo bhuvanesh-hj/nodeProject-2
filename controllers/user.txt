@@ -1,0 +1,49 @@
+const User = require("../models/user");
+
+exports.postAddProduct = (req, res, next) => {
+  let name = req.body.name;
+  let email = req.body.email;
+  let phone = req.body.phone;
+  try {
+    User.create({
+      username: name,
+      email: email,
+      phone: phone,
+    }).then((result) => {
+      console.log("Created the user");
+      res.status(201).json({ data: result });
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error,
+    });
+  }
+}
+
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json({ allUsers: users });
+  } catch (error) {
+    console.log(
+      "Get user is failling to fetch data from database",
+      JSON.stringify(error)
+    );
+    res.status(200).json({ error: error });
+  }
+}
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    if (!req.params.userId) {
+      console.log("Id is missing");
+      return res.status(400).json({ error: "Id is missing" });
+    }
+    const uId = req.params.userId;
+    await User.destroy({ where: { id: uId } });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error });
+  }
+}
